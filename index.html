@@ -62,22 +62,6 @@
       border: none
     }
 
-    /* .video-container {
-      position: relative;
-      width: 600px;
-      margin: 0 auto;
-      padding-bottom: 56.25%; /* 16:9宽高比，调整此值适配其他比例的视频 */
-    /* overflow: hidden;
-    }
-
-    /* 视频元素的样式 */
-    /* .video-container video {
-      /* position: absolute; */
-    /* top: 0;
-      left: 0;
-      width: 600px; */
-    /* height: 100%; */
-
     video {
       width: 640px;
       /* 设置视频宽度 */
@@ -150,190 +134,19 @@
       <article itemscope itemtype="https://schema.org/BlogPosting">
         <br></br>
         <h1 itemprop="headline" align="center">
-          <font color="000093">MAGICITY4D: Controllable and Editable 4D City Scene Generation Using MLLM-Enhanced Procedural Content Generation</br>
+          <font color="000093">ULG-DiT: High-Fidelity Urban Layout Generation with Diffusion Transformer</br>
           </font>
         </h1>
         <br></br>
-        <!-- <p style="line-height:1" align="center"><b>
-          <font color="061E61">Xu Zhang<sup>1</sup>, Hualong Yu<sup>1</sup>, Xiaohang Dong<sup>1</sup>, Jianye Wang<sup>1</sup>, Qicheng Li<sup>1,*</sup></font>
-          </b></p>
-        <p style="line-height:0.6" align="center">
-          <font color="061E61"><sup>1</sup>College of Computer Science, Nankai University, Tianjin, China</font>
-        </p>
-
-        <p style="line-height:1;font-size:17px;" align="center">
-          <font color="061E61"><sup>*</sup>Corresponding author</font>
-        </p> -->
+        
         <section itemprop="entry-text">
-          <br>
-
-      <div class="video-carousel-container">
-        <div class="video-carousel-strip" id="videoStrip">
-            </div>
-        <div class="video-controls">
-            <button onclick="moveCarousel(-1)">&#9664;</button>
-            <button onclick="moveCarousel(1)">&#9654;</button>
-        </div>
-    </div>
-    
-    <script>
-        // 视频数据源，可以根据需要添加或删除
-        const videoData = [
-            './video/video1.mp4',
-            './video/video2.mp4',
-            './video/video3.mp4',
-            './video/video4.mp4',
-            './video/video5.mp4',
-            './video/video6.mp4',
-        ];
-    
-        const videoStrip = document.getElementById('videoStrip');
-        // --- 关键配置参数 ---
-        const videoWidth = 600;        // 每个视频的固定宽度
-        const videoGap = 30;           // 视频之间的间距
-        const visiblePartWidth = 150;  // 左右各露出部分的宽度
-        const transitionDuration = 500; // 动画持续时间（毫秒）
-        // --- 关键配置结束 ---
-    
-        // 自动计算容器和视频项的宽度
-        const containerWidth = videoWidth + (visiblePartWidth * 2) + (videoGap * 2);
-        const itemFullWidth = videoWidth + videoGap;
-    
-        let currentVideoIndex = 1; // 初始索引从1开始，因为索引0是副本
-        let isMoving = false;
-    
-        // 1. 创建视频元素和副本，并添加到DOM中
-        function createVideoItems() {
-            if (videoData.length <= 1) {
-                console.error("视频数量不足，无法实现无缝循环。请添加更多视频。");
-                return;
-            }
-    
-            // 添加最后一个视频的副本到开头
-            videoStrip.appendChild(createVideoElement(videoData[videoData.length - 1], 'clone'));
-            // 添加所有真实视频
-            videoData.forEach(src => videoStrip.appendChild(createVideoElement(src)));
-            // 添加第一个视频的副本到结尾
-            videoStrip.appendChild(createVideoElement(videoData[0], 'clone'));
-    
-            // 确保所有视频都自动播放
-            document.querySelectorAll('.video-item').forEach(video => video.play());
-        }
-    
-        function createVideoElement(src, className = '') {
-            const video = document.createElement('video');
-            video.className = `video-item ${className}`;
-            video.controls = true;
-            video.muted = true;
-            video.loop = true;
-            video.playsinline = true; // 移动端内联播放
-            video.innerHTML = `<source src="${src}" type="video/mp4">`;
-            return video;
-        }
-    
-        // 2. 移动轮播图的核心函数
-        function moveCarousel(direction) {
-            if (isMoving) return;
-            isMoving = true;
-    
-            videoStrip.style.transition = `transform ${transitionDuration}ms ease-in-out`;
-            currentVideoIndex += direction;
-    
-            // 计算平移距离
-            const offset = (currentVideoIndex * itemFullWidth) - (visiblePartWidth + videoGap);
-            videoStrip.style.transform = `translateX(-${offset}px)`;
-    
-            // 在动画结束后进行瞬时重置
-            setTimeout(() => {
-                if (currentVideoIndex === videoData.length + 1 || currentVideoIndex === 0) {
-                    videoStrip.style.transition = 'none';
-    
-                    if (currentVideoIndex === videoData.length + 1) {
-                        currentVideoIndex = 1;
-                    } else if (currentVideoIndex === 0) {
-                        currentVideoIndex = videoData.length;
-                    }
-    
-                    const resetOffset = (currentVideoIndex * itemFullWidth) - (visiblePartWidth + videoGap);
-                    videoStrip.style.transform = `translateX(-${resetOffset}px)`;
-                }
-                isMoving = false;
-            }, transitionDuration);
-        }
-    
-        // 页面加载时执行
-        window.onload = () => {
-            // 在JS中设置容器的宽度，确保与计算值一致
-            const videoContainer = document.querySelector('.video-carousel-container');
-            videoContainer.style.width = `${containerWidth}px`;
-            
-            createVideoItems();
-            // 初始位置，让第一个真实视频居中
-            const initialOffset = (currentVideoIndex * itemFullWidth) - (visiblePartWidth + videoGap);
-            videoStrip.style.transform = `translateX(-${initialOffset}px)`;
-        };
-    </script>
-    
-    <style>
-        /* 容器：限制可见区域 */
-        .video-carousel-container {
-            position: relative;
-            height: auto;
-            overflow: hidden;
-            margin: 0 auto;
-        }
-    
-        /* 视频条带：所有视频的容器 */
-        .video-carousel-strip {
-            display: flex;
-            /* 动画过渡时间由 JS 动态控制 */
-        }
-    
-        /* 每个视频元素 */
-        .video-item {
-            width: 600px;
-            height: auto;
-            flex-shrink: 0;
-            margin-right: 30px;
-        }
-    
-        /* 切换按钮 */
-        .video-controls {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            transform: translateY(-50%);
-            display: flex;
-            justify-content: space-between;
-            z-index: 10;
-            padding: 0 10px;
-        }
-    
-        .video-controls button {
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            color: white;
-            font-size: 2em;
-            cursor: pointer;
-            padding: 10px;
-            border-radius: 50%;
-        }
-    
-        .video-controls button:hover {
-            background: rgba(0, 0, 0, 0.8);
-        }
-    </style>
-
-
-    <br>
 
           <h2 style="text-align: center;" id="abstract">
             <font color="000093">Abstract</font>
         </h2>
           <p style="text-align: justify;">
             <font color="061E61">
-              In recent years, 3D city scene generation has made significant progress. However, controllable and editable 4D city scene generation remains a largely unsolved challenge. The core difficulty lies in effectively incorporating temporal dynamics. It also requires precise control over scene content and higher system coordination. To address these challenges, we propose MagiCity4D, a multimodal 4D city scene generation framework. By deeply integrating Multimodal Large Language Models (MLLMs) and Procedural Content Generation (PCG), our framework enables both controllable 4D city scene generation and real-time, fine-grained editing without additional training. The experimental results show that MagiCity4D outperforms existing methods in overall performance, demonstrating its potential for advanced city scene generation. Our project page: https://erxucomeon.github.io/MagiCity.</font>
+                Urban layout generation plays a critical role in urban simulation, digital twin construction, and content creation.However, existing diffusion-based image generation methods, primarily designed for natural images, struggle to capture the structural consistency and multi-layered semantics required for realistic urban layouts.In this work, we propose \textbf{ULG-DiT}, a controllable urban layout generation framework based on a conditioned Diffusion Transformer.ULG-DiT jointly leverages textual descriptions and road network sketches through a novel cross-modal conditioning strategy.Central to our framework is the \textbf{Geometric Consistency Module}, which enhances cross-modal alignment and preserves road fidelity while enabling fine-grained semantic control.To support this task, we construct the first large-scale multimodal urban layout dataset, comprising one-to-one aligned road networks, building footprints, and rich textual annotations spanning 345 major cities.Extensive experiments demonstrate that ULG-DiT significantly outperforms existing baselines in both geometric coherence and controllable generation.Our work opens new avenues for fine-grained, context-aware urban layout synthesis and lays a foundation for extending layout guidance to 3D urban generation.The code and dataset are available at https://anonymous.4open.science/r/-dit-05FC.</font>
           </p>
            
           <br>
